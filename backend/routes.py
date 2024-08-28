@@ -172,26 +172,129 @@ def students():
         return jsonify({"error": str(e)}), 500
 
 
-@main.route("/admin/<int:tab_id>", methods=["POST"])
-def admin(tab_id):
+
+    
+
+@main.route("/news", methods=["GET"])
+def news():
     try:
         cursor = mysql.connection.cursor()
-        if tab_id == 1 :
-            course_id = request.form.get("course")
-            national_id = request.form.get("melliCode")
-
-            query= """
-            INSERT INTO users_courses(course_id, national_id) VALUES(%s, %s)
-            """
-            print(query)
-            cursor.execute(query, (course_id, national_id,))
-            mysql.connection.commit()
-            cursor.close()
-
-            return jsonify({"message": "ثبت شد."})
+        
+        query= """
+        SELECT * FROM news
+        """
+        cursor.execute(query)
+        news = cursor.fetchall()
+        cursor.close()
+        
+        return jsonify({"news": news})
         
     except Exception as e :
             return jsonify({"error": str(e)}), 500
+    
+@main.route("/news", methods=["POST"])
+def add_news():
+    try:
+        
+        title = request.form.get("title")
+        description = request.form.get("description")
+
+        cursor = mysql.connection.cursor()
+        query = """INSERT INTO news(title, description) VALUES(%s, %s)"""
+        cursor.execute(query, (title, description,))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({"message": "خبر با موفقیت ثبت شد."}), 201
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@main.route("/news/<int:id>", methods=["DELETE"])
+def delete_news(id):
+    try:
+        cursor = mysql.connection.cursor()
+
+        query = """DELETE FROM news WHERE id = %s"""
+        cursor.execute(query, (id,))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({"message": "خبر با موفقیت حذف شد."}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+
+@main.route('/students/<int:national_id>/courses/<int:course_id>', methods=['POST'])
+def add_course_for_user(national_id, course_id):
+    try:
+        cursor = mysql.connection.cursor()
+
+        # Insert into users_courses table to register the student for the course
+        query = """
+        INSERT INTO users_courses (national_id, course_id)
+        VALUES (%s, %s)
+        """
+        cursor.execute(query, (national_id, course_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({"message": "Course added successfully"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@main.route('/students/<int:national_id>/courses/<int:course_id>', methods=['DELETE'])
+def delete_course_for_user(national_id, course_id):
+    try:
+        cursor = mysql.connection.cursor()
+
+        # Delete from users_courses table to unregister the student from the course
+        query = """
+        DELETE FROM users_courses
+        WHERE national_id = %s AND course_id = %s
+        """
+        cursor.execute(query, (national_id, course_id))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({"message": "Course deleted successfully"}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+
+@main.route('/courses', methods=['POST'])
+def add_course():
+    try:
+        title = request.json.get('title')
+        coach = request.json.get('coach')
+        price = request.json.get('price')
+        capacity = request.json.get('capacity')
+        event_date = request.json.get('event_date')
+
+        cursor = mysql.connection.cursor()
+        query = """
+        INSERT INTO courses (course_name, coach, price, capacity, capacity_left, event_date)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        # Assuming capacity_left is initialized with the same value as capacity
+        cursor.execute(query, (title, coach, price, capacity, capacity, event_date))
+        mysql.connection.commit()
+        cursor.close()
+
+        return jsonify({"message": "Course added successfully"}), 201
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+    
+
+
     
 
 
