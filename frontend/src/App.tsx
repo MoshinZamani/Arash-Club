@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./fonts/IranianSans.ttf";
 import About from "./components/About";
-import Home from "./components/Home";
 import Contact from "./components/Contact";
 import Events from "./components/Events";
 import Gallery from "./components/Gallery";
@@ -13,6 +12,7 @@ import Register from "./components/Register";
 import LogIn from "./components/LogIn";
 import Dashboard from "./components/Dashboard";
 import Admin from "./components/Admin";
+import Slideshow from "./components/Slideshow";
 
 const App: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ const App: React.FC = () => {
         <div className="w-full bg-cover bg-no-repeat min-h-screen">
           <main>
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Slideshow />} />
               <Route path="/about" element={<About />} />
               <Route path="/events" element={<Events />} />
               <Route path="/gallery" element={<Gallery />} />

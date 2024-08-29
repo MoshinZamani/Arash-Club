@@ -74,6 +74,16 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.logo {
+  height: 40%;
+  width: 40%;
+}
+
+.menu {
+  border: 1px solid #338ec9;
+  background-color: #0072bc;
+}
+
 Link:hover {
   color: black;
 }
@@ -90,8 +100,10 @@ Link:hover {
   width: 20%;
   padding: 8px;
   text-align: center;
-  color: black;
   padding: 24px 0;
+}
+.link-mn p {
+  color: white;
 }
 
 .link-mn:visited {
@@ -135,4 +147,15 @@ header {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.dot {
+  margin: 0 3px;
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+}
+
+.dot:hover .fa-circle {
+  color: purple;
 }
